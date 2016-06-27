@@ -179,6 +179,8 @@ export default class Message extends Component {
             handlePhonePress={this.props.handlePhonePress}
             handleUrlPress={this.props.handleUrlPress}
             handleEmailPress={this.props.handleEmailPress}
+            answers={position === 'left' && rowData.answers ? rowData.answers : null}
+            handleAnswerPress={this.props.handleAnswerPress}
           />
           {rowData.position === 'right' ? this.renderImage(rowData, diffMessage, forceRenderImage, onImagePress) : null}
         </View>

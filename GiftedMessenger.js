@@ -501,6 +501,7 @@ class GiftedMessenger extends Component {
           handlePhonePress={this.props.handlePhonePress}
           handleUrlPress={this.props.handleUrlPress}
           handleEmailPress={this.props.handleEmailPress}
+          handleAnswerPress={this.props.handleAnswerPress}
 
           styles={this.styles}
         />
@@ -599,7 +600,7 @@ class GiftedMessenger extends Component {
 
   render() {
     return (
-      <View style={this.styles.container}>
+      <View style={[this.styles.container, this.props.styles.container]}>
         {this.renderAnimatedView()}
         {this.renderTextInput()}
       </View>
@@ -614,6 +615,7 @@ GiftedMessenger.defaultProps = {
   displayNames: true,
   displayNamesInsideBubble: false,
   forceRenderImage: false,
+  handleAnswerPress: () => {},
   handleEmailPress: () => {},
   handlePhonePress: () => {},
   handleSend: () => {},
@@ -652,6 +654,7 @@ GiftedMessenger.propTypes = {
   displayNames: React.PropTypes.bool,
   displayNamesInsideBubble: React.PropTypes.bool,
   forceRenderImage: React.PropTypes.bool,
+  handleAnswerPress: React.PropTypes.func,
   handleEmailPress: React.PropTypes.func,
   handlePhonePress: React.PropTypes.func,
   handleSend: React.PropTypes.func,
