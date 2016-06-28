@@ -57,16 +57,16 @@ class GiftedMessengerContainer extends Component {
     }, 3000); // simulating network
 
 
-    setTimeout(() => {
-      this.handleReceive({
-        text: 'Hello Awesome Developer',
-        name: 'React-Bot',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'left',
-        date: new Date(),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      });
-    }, 3300); // simulating network
+    // setTimeout(() => {
+    //   this.handleReceive({
+    //     text: 'Hello Awesome Developer',
+    //     name: 'React-Bot',
+    //     image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+    //     position: 'left',
+    //     date: new Date(),
+    //     uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
+    //   });
+    // }, 3300); // simulating network
   }
 
   componentWillUnmount() {
@@ -82,15 +82,23 @@ class GiftedMessengerContainer extends Component {
         position: 'left',
         date: new Date(2016, 3, 14, 13, 0),
         uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
+        answers: [
+          {
+            "text": "Yes, and I use Gifted Messenger"
+          },
+          {
+            "text": "No, I'm just watching"
+          },
+        ]
       },
-      {
-        text: "Yes, and I use Gifted Messenger!",
-        name: 'Awesome Developer',
-        image: null,
-        position: 'right',
-        date: new Date(2016, 3, 14, 13, 1),
-        uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
-      },
+      // {
+      //   text: "Yes, and I use Gifted Messenger!",
+      //   name: 'Awesome Developer',
+      //   image: null,
+      //   position: 'right',
+      //   date: new Date(2016, 3, 14, 13, 1),
+      //   uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
+      // },
     ];
   }
 
@@ -206,6 +214,9 @@ class GiftedMessengerContainer extends Component {
         ref={(c) => this._GiftedMessenger = c}
 
         styles={{
+          container: {
+            marginTop: STATUS_BAR_HEIGHT,
+          },
           bubbleRight: {
             marginLeft: 70,
             backgroundColor: '#007aff',
@@ -230,6 +241,7 @@ class GiftedMessengerContainer extends Component {
         handlePhonePress={this.handlePhonePress}
         handleUrlPress={this.handleUrlPress}
         handleEmailPress={this.handleEmailPress}
+        handleAnswerPress={(answer) => this.handleAnswerPress(answer)}
 
         isLoadingEarlierMessages={this.state.isLoadingEarlierMessages}
 
@@ -272,6 +284,16 @@ class GiftedMessengerContainer extends Component {
 
   handleEmailPress(email) {
     Communications.email(email, null, null, null, null);
+  }
+
+  handleAnswerPress(answer) {
+    this.handleSend({
+      text: answer.text,
+      name: "",
+      image: null,
+      position: 'right',
+      date: new Date(),
+    });
   }
 
 }

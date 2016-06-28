@@ -1,18 +1,19 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
 
 import ParsedText from 'react-native-parsed-text';
 
 const styles = StyleSheet.create({
   bubble: {
     borderRadius: 15,
-    paddingLeft: 14,
-    paddingRight: 14,
-    paddingBottom: 10,
     paddingTop: 8,
+    overflow: "hidden",
   },
   text: {
     color: '#000',
+    marginLeft: 14,
+    marginRight: 14,
+    marginBottom: 10,
   },
   textLeft: {
   },
@@ -39,6 +40,22 @@ const styles = StyleSheet.create({
   bubbleError: {
     backgroundColor: '#e01717',
   },
+  answers: {
+    marginTop: 8,
+    // flex: 1,
+    // alignSelf: "stretch",
+    backgroundColor: "#f6f6f6",
+    width: 212,
+  },
+  answer: {
+    borderTopWidth: 1,
+    padding: 6,
+    paddingLeft: 14,
+    paddingRight: 14,
+    borderColor: "black",
+    alignSelf: "stretch",
+    flex: 1,
+  }
 });
 
 export default class Bubble extends React.Component {
@@ -94,6 +111,30 @@ export default class Bubble extends React.Component {
     );
   }
 
+  onAnswerPress(answer) {
+    console.log("All the infos about the answer pressed", answer);
+  }
+
+  renderAnswers(answers, handleAnswerPress) {
+    let answersOutput = answers.map((answer, i) => {
+      return (
+        <TouchableHighlight
+          key={"answer-" + i}
+          underlayColor="transparent"
+          onPress={() => handleAnswerPress(answer)}
+          style={styles.answer}
+          >
+          <Text>{answer.text}</Text>
+        </TouchableHighlight>
+      )
+    });
+    return (
+      <View style={styles.answers}>
+        {answersOutput}
+      </View>
+    )
+  }
+
   render() {
     const flexStyle = {};
     const realLength = function(str) {
@@ -113,6 +154,7 @@ export default class Bubble extends React.Component {
       >
         {this.props.name}
         {this.renderText(this.props.text, this.props.position)}
+        {this.props.answers ? this.renderAnswers(this.props.answers, this.props.handleAnswerPress) : null}
       </View>
   );
   }
@@ -129,4 +171,5 @@ Bubble.propTypes = {
   handleUrlPress: React.PropTypes.func,
   handlePhonePress: React.PropTypes.func,
   handleEmailPress: React.PropTypes.func,
+  handleAnswerPress: React.PropTypes.func,
 };
