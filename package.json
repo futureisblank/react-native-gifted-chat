@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/futureisblank/react-native-gifted-messenger#readme",
   "dependencies": {
-    "react-native-gifted-messenger": "./GiftedMessengerExample/react-native-gifted-messenger"
+    "react-native-gifted-messenger": "./GiftedMessengerExample/react-native-gifted-messenger/"
   }
 }
