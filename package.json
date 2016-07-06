@@ -3,7 +3,7 @@
   "name": "react-native-gifted-messenger-blank",
   "version": "1.0.0",
   "description": "React Native Messenger customized for Blank's need",
-  "main": "GiftedMessengerExample/react-native-gifted-messenger/index.js",
+  "main": "react-native-gifted-messenger/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,8 +16,5 @@
   "bugs": {
     "url": "https://github.com/futureisblank/react-native-gifted-messenger/issues"
   },
-  "homepage": "https://github.com/futureisblank/react-native-gifted-messenger#readme",
-  "dependencies": {
-    "react-native-gifted-messenger-blank": "./GiftedMessengerExample/react-native-gifted-messenger/"
-  }
+  "homepage": "https://github.com/futureisblank/react-native-gifted-messenger#readme"
 }

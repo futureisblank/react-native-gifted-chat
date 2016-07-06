@@ -4,7 +4,7 @@ import {
   View,
 } from 'react-native';
 
-import {
+var {
   GiftedMessenger,
   Actions,
   Avatar,
@@ -20,7 +20,7 @@ import {
   Send,
   Time,
   DefaultStyles,
-} from './react-native-gifted-messenger';
+} = require('react-native-gifted-messenger');
 
 let dispatcher = function(args) {
   console.log("dispatcher received args:", args);

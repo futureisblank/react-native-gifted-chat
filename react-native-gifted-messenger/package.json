@@ -38,7 +38,7 @@
     "react-native-camera-roll-picker": "^1.0.8",
     "react-native-communications": "^2.0.0",
     "react-native-dismiss-keyboard": "^1.0.0",
-    "react-native-gifted-avatar": "file://react-native-gifted-avatar/",
+    "react-native-gifted-avatar": "./react-native-gifted-avatar/",
     "react-native-invertible-scroll-view": "^1.0.0",
     "react-native-lightbox": "^0.6.0",
     "react-native-nav": "^1.1.4",
