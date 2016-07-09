@@ -3,11 +3,11 @@ import {
   Animated,
   View,
   InteractionManager,
+  ScrollView,
 } from 'react-native';
 
 import ActionSheet from '@exponent/react-native-action-sheet';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
-import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import moment from 'moment/min/moment-with-locales.min';
 
 import Actions from './components/Actions';
@@ -36,6 +36,8 @@ class GiftedMessenger extends Component {
     super(props);
 
     // default values
+    this._actionsBarHeight = this.props.actionsBarHeight;
+    this._statusBarHeight = this.props.statusBarHeight;
     this._keyboardHeight = 0;
     this._maxHeight = null;
     this._touchStarted = false;
@@ -61,14 +63,14 @@ class GiftedMessenger extends Component {
     if (!Array.isArray(messages)) {
       messages = [messages];
     }
-    return messages.concat(currentMessages);
+    return currentMessages.concat(messages);
   }
 
   static prepend(currentMessages = [], messages) {
     if (!Array.isArray(messages)) {
       messages = [messages];
     }
-    return currentMessages.concat(messages);
+    return messages.concat(currentMessages);
   }
 
   // static update(currentMessages = [], options) {
@@ -136,6 +138,9 @@ class GiftedMessenger extends Component {
   }
 
   getCustomStyles() {
+    if (this.props.hideInputToolbar) {
+      this._customStyles.minInputToolbarHeight = 0;
+    }
     return this._customStyles;
   }
 
@@ -148,7 +153,7 @@ class GiftedMessenger extends Component {
   }
 
   setMaxHeight(height) {
-    this._maxHeight = height;
+    this._maxHeight = height - this.getStatusBarHeight() - this.getActionsBarHeight();
   }
 
   getMaxHeight() {
@@ -161,6 +166,22 @@ class GiftedMessenger extends Component {
 
   getKeyboardHeight() {
     return this._keyboardHeight;
+  }
+
+  setActionsBarHeight(height) {
+    this._actionsBarHeight = height;
+  }
+
+  getActionsBarHeight() {
+    return this._actionsBarHeight;
+  }
+
+  setStatusBarHeight(height) {
+    this._statusBarHeight = height;
+  }
+
+  getStatusBarHeight() {
+    return this._statusBarHeight;
   }
 
   onKeyboardWillShow(e) {
@@ -208,8 +229,7 @@ class GiftedMessenger extends Component {
       <Animated.View style={{
         height: this.state.messagesContainerHeight,
       }}>
-        <InvertibleScrollView
-          inverted={true}
+        <ScrollView
           keyboardShouldPersistTaps={true}
 
           onTouchStart={this.onTouchStart.bind(this)}
@@ -220,6 +240,17 @@ class GiftedMessenger extends Component {
           onKeyboardWillHide={this.onKeyboardWillHide.bind(this)}
 
           ref={component => this._scrollViewRef = component}
+
+          // Attempt to scroll to the last message on send / receive events
+
+          // onLayout={event => {
+          //   // event.nativeEvent.layout.height
+          //   this._scrollViewRef.scrollTo({y: this._scrollViewRef.contentHeight - this.state.messagesContainerHeight._value, animated: true});
+          // }}
+          // onContentSizeChange={(width, height) => {
+          //   this._scrollViewRef.contentHeight = height;
+          //   this._scrollViewRef.scrollTo({y: this._scrollViewRef.contentHeight - this.state.messagesContainerHeight._value, animated: true})
+          // }}
 
           {...this.props.scrollViewProps}
         >
@@ -232,8 +263,8 @@ class GiftedMessenger extends Component {
               ...this.props,
               ...message,
               key: message.id,
-              previousMessage: this.getMessages()[index + 1] || {},
-              nextMessage: this.getMessages()[index - 1] || {},
+              previousMessage: this.getMessages()[index - 1] || {},
+              nextMessage: this.getMessages()[index + 1] || {},
               customStyles: this.getCustomStyles(),
               locale: this.getLocale(),
               onAnswerPress: this.onAnswerPress.bind(this),
@@ -247,7 +278,7 @@ class GiftedMessenger extends Component {
           })}
 
           {this.renderLoadEarlier()}
-        </InvertibleScrollView>
+        </ScrollView>
       </Animated.View>
     );
   }
@@ -294,7 +325,7 @@ class GiftedMessenger extends Component {
       this.resetInputToolbar();
     }
     this.props.onSend(messages);
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   onAnswerPress(answer) {
@@ -315,7 +346,7 @@ class GiftedMessenger extends Component {
   resetInputToolbar() {
     this.setState({
       text: '',
-      composerHeight: this.getCustomStyles().minComposerHeight,
+      composerHeight: this.props.hideInputToolbar ? 0 : this.getCustomStyles().minComposerHeight,
       messagesContainerHeight: new Animated.Value(this.getMaxHeight() - this.getCustomStyles().minInputToolbarHeight - this.getKeyboardHeight()),
     });
   }
@@ -325,20 +356,30 @@ class GiftedMessenger extends Component {
   }
 
   onType(e) {
-    const newComposerHeight = Math.max(this.getCustomStyles().minComposerHeight, Math.min(this.getCustomStyles().maxComposerHeight, e.nativeEvent.contentSize.height));
+    const newComposerHeight = this.props.hideInputToolbar ? 0 : Math.max(this.getCustomStyles().minComposerHeight, Math.min(this.getCustomStyles().maxComposerHeight, e.nativeEvent.contentSize.height));
     const newMessagesContainerHeight = this.getMaxHeight() - this.calculateInputToolbarHeight(newComposerHeight) - this.getKeyboardHeight();
     this.setState({
       text: e.nativeEvent.text,
-      composerHeight: newComposerHeight,
+      composerHeight: this.props.hideInputToolbar ? 0 : newComposerHeight,
       messagesContainerHeight: new Animated.Value(newMessagesContainerHeight),
     });
   }
 
+  renderActionsbar() {
+    if (this.props.renderActionsBar) {
+      return this.props.renderActionsBar();
+    }
+    return null;
+  }
+
   renderInputToolbar() {
+    if (this.props.hideInputToolbar) {
+      return null;
+    }
     const inputToolbarProps = {
       ...this.props,
       text: this.state.text,
-      composerHeight: Math.max(this.getCustomStyles().minComposerHeight, this.state.composerHeight),
+      composerHeight: this.props.hideInputToolbar ? 0 : Math.max(this.getCustomStyles().minComposerHeight, this.state.composerHeight),
       onChange: this.onType.bind(this),
       onSend: this.onSend.bind(this),
       customStyles: this.getCustomStyles(),
@@ -355,8 +396,9 @@ class GiftedMessenger extends Component {
     if (this.state.isInitialized === true) {
       return (
         <ActionSheet ref={component => this._actionSheetRef = component}>
-          <View style={{flex: 1}}>
+          <View style={{marginTop:this.getStatusBarHeight(), flex: 1}}>
             {this.renderMessages()}
+            {this.renderActionsbar()}
             {this.renderInputToolbar()}
           </View>
         </ActionSheet>
@@ -373,7 +415,7 @@ class GiftedMessenger extends Component {
             this.setState({
               isInitialized: true,
               text: '',
-              composerHeight: this.getCustomStyles().minComposerHeight,
+              composerHeight: this.props.hideInputToolbar ? 0 : this.getCustomStyles().minComposerHeight,
               messagesContainerHeight: new Animated.Value(this.getMaxHeight() - this.getCustomStyles().minInputToolbarHeight),
             });
           });
@@ -393,6 +435,7 @@ GiftedMessenger.defaultProps = {
   // customStyles: {},
   customStyles: null, // initCustomStyles will check null value
   renderActions: null,
+  renderActionsBar: null,
   renderAvatar: null,
   renderBubble: null,
   renderParsedText: null,
@@ -405,6 +448,7 @@ GiftedMessenger.defaultProps = {
   renderSend: null,
   renderTime: null,
   scrollViewProps: null,
+  statusBarHeight: 20,
   user: {},
 };
 
