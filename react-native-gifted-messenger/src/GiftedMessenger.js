@@ -242,15 +242,14 @@ class GiftedMessenger extends Component {
           ref={component => this._scrollViewRef = component}
 
           // Attempt to scroll to the last message on send / receive events
-
-          // onLayout={event => {
-          //   // event.nativeEvent.layout.height
-          //   this._scrollViewRef.scrollTo({y: this._scrollViewRef.contentHeight - this.state.messagesContainerHeight._value, animated: true});
-          // }}
-          // onContentSizeChange={(width, height) => {
-          //   this._scrollViewRef.contentHeight = height;
-          //   this._scrollViewRef.scrollTo({y: this._scrollViewRef.contentHeight - this.state.messagesContainerHeight._value, animated: true})
-          // }}
+          onLayout={event => {
+            // event.nativeEvent.layout.height
+            this._scrollViewRef.scrollTo({y: this._scrollViewRef.contentHeight - this.state.messagesContainerHeight._value, animated: true});
+          }}
+          onContentSizeChange={(width, height) => {
+            this._scrollViewRef.contentHeight = height;
+            this._scrollViewRef.scrollTo({y: this._scrollViewRef.contentHeight - this.state.messagesContainerHeight._value, animated: true})
+          }}
 
           {...this.props.scrollViewProps}
         >
