@@ -153,7 +153,7 @@ class GiftedMessenger extends Component {
   }
 
   setMaxHeight(height) {
-    this._maxHeight = height - this.getStatusBarHeight() - this.getActionsBarHeight();
+    this._maxHeight = height;
   }
 
   getMaxHeight() {
@@ -162,6 +162,7 @@ class GiftedMessenger extends Component {
 
   setKeyboardHeight(height) {
     this._keyboardHeight = height;
+    this.recalculateContainerHeight();
   }
 
   getKeyboardHeight() {
@@ -170,6 +171,7 @@ class GiftedMessenger extends Component {
 
   setActionsBarHeight(height) {
     this._actionsBarHeight = height;
+    this.recalculateContainerHeight();
   }
 
   getActionsBarHeight() {
@@ -186,17 +188,21 @@ class GiftedMessenger extends Component {
 
   onKeyboardWillShow(e) {
     this.setKeyboardHeight(e.endCoordinates.height);
-    Animated.timing(this.state.messagesContainerHeight, {
-      toValue: (this.getMaxHeight() - (this.state.composerHeight + (this.getCustomStyles().minInputToolbarHeight - this.getCustomStyles().minComposerHeight))) - this.getKeyboardHeight(),
-      duration: 200,
-    }).start();
   }
 
   onKeyboardWillHide() {
     this.setKeyboardHeight(0);
+  }
+
+  getComposerHeight() {
+    return Math.max(0, this.getCustomStyles().minInputToolbarHeight - this.getCustomStyles().minComposerHeight);
+  }
+
+  recalculateContainerHeight() {
+    let messagesContainerHeight = this.getMaxHeight() - this.getKeyboardHeight() - this.getActionsBarHeight() - this.getStatusBarHeight() - this.getComposerHeight();
     Animated.timing(this.state.messagesContainerHeight, {
-      toValue: this.getMaxHeight() - (this.state.composerHeight + (this.getCustomStyles().minInputToolbarHeight - this.getCustomStyles().minComposerHeight)),
-      duration: 200,
+      toValue: messagesContainerHeight,
+      duration: 0,
     }).start();
   }
 
@@ -396,7 +402,14 @@ class GiftedMessenger extends Component {
         <ActionSheet ref={component => this._actionSheetRef = component}>
           <View style={{marginTop:this.getStatusBarHeight(), flex: 1}}>
             {this.renderMessages()}
-            {this.renderActionsbar()}
+            <View
+              onLayout={(event) => {
+                var {x, y, width, height} = event.nativeEvent.layout;
+                this.setActionsBarHeight(height);
+              }}
+            >
+              {this.renderActionsbar()}
+            </View>
             {this.renderInputToolbar()}
           </View>
         </ActionSheet>
