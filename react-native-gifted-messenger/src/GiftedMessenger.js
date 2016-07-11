@@ -266,7 +266,7 @@ class GiftedMessenger extends Component {
               nextMessage: this.getMessages()[index + 1] || {},
               customStyles: this.getCustomStyles(),
               locale: this.getLocale(),
-              onAnswerPress: this.onAnswerPress.bind(this),
+              onAnswerPress: this.onAnswerPress,
               position: message.user.id === this.props.user.id ? 'right' : 'left',
             };
 
@@ -329,9 +329,8 @@ class GiftedMessenger extends Component {
 
   onAnswerPress(answer) {
     if (answer.action) {
-      const {dispatch} = this.props;
-      if (dispatch) {
-        dispatch({type: answer.action, action: answer});
+      if (this.dispatch) {
+        this.dispatch({...answer.action, data: answer});
         if (answer.preventSendMessage) {
           return;
         }
