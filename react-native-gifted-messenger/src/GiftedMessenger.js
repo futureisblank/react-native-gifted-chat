@@ -334,17 +334,16 @@ class GiftedMessenger extends Component {
   }
 
   onAnswerPress(answer) {
+    if (!answer.preventSendMessage) {
+      this.onSend({
+        text: answer.text.trim()
+      });
+    }
     if (answer.action) {
       if (this.dispatch) {
         this.dispatch({...answer.action, data: answer});
-        if (answer.preventSendMessage) {
-          return;
-        }
       }
     }
-    this.onSend({
-      text: answer.text.trim()
-    });
   }
 
   resetInputToolbar() {
