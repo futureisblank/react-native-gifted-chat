@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import {
   Clipboard,
   StyleSheet,
@@ -13,7 +13,7 @@ import MessageText from './MessageText';
 import MessageImage from './MessageImage';
 import Time from './Time';
 
-export default class Bubble extends Component {
+export default class Bubble extends React.Component {
   constructor(props) {
     super(props);
     this.onLongPress = this.onLongPress.bind(this);
@@ -171,7 +171,7 @@ const styles = {
 };
 
 Bubble.contextTypes = {
-  actionSheet: PropTypes.func,
+  actionSheet: React.PropTypes.func,
 };
 
 Bubble.defaultProps = {
@@ -179,7 +179,6 @@ Bubble.defaultProps = {
   wrapperStyle: {},
   containerToNextStyle: {},
   containerToPreviousStyle: {},
-
   renderMessageImage: null,
   renderMessageText: null,
   renderCustomView: null,
@@ -194,4 +193,21 @@ Bubble.defaultProps = {
   },
   nextMessage: {},
   previousMessage: {},
+};
+
+Bubble.propTypes = {
+  containerStyle: React.PropTypes.object,
+  wrapperStyle: React.PropTypes.object,
+  containerToNextStyle: React.PropTypes.object,
+  containerToPreviousStyle: React.PropTypes.object,
+  renderMessageImage: React.PropTypes.func,
+  renderMessageText: React.PropTypes.func,
+  renderCustomView: React.PropTypes.func,
+  renderTime: React.PropTypes.func,
+  isSameUser: React.PropTypes.func,
+  isSameDay: React.PropTypes.func,
+  position: React.PropTypes.oneOf(['left', 'right']),
+  currentMessage: React.PropTypes.object,
+  nextMessage: React.PropTypes.object,
+  previousMessage: React.PropTypes.object,
 };
