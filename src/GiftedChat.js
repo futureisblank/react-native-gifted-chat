@@ -382,11 +382,20 @@ class GiftedChat extends React.Component {
 
   recalculateContainerHeight() {
     let messagesContainerHeight = this.getMaxHeight() - this.getKeyboardHeight() - this.getActionsBarHeight() - this.state.composerHeight;
-    Animated.timing(this.state.messagesContainerHeight, {
-      toValue: messagesContainerHeight,
-      duration: 0,
-    }).start();
+    if (this.props.isAnimated === true) {
+      Animated.timing(this.state.messagesContainerHeight, {
+        toValue: messagesContainerHeight,
+        duration: 210,
+      }).start();
+    } else {
+      this.setState((previousState) => {
+        return {
+          messagesContainerHeight,
+        };
+      });
+    }
   }
+
 
   onType(e) {
     if (this.getIsTypingDisabled() === true) {
