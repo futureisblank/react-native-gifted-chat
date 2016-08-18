@@ -159,8 +159,10 @@ class GiftedChat extends React.Component {
   }
 
   setActionsBarHeight(height) {
-    this._actionsBarHeight = height;
-    this.recalculateContainerHeight();
+    if (height !== this.getActionsBarHeight()) {
+      this._actionsBarHeight = height;
+      this.recalculateContainerHeight();
+    }
   }
 
   getActionsBarHeight() {
@@ -382,18 +384,18 @@ class GiftedChat extends React.Component {
 
   recalculateContainerHeight() {
     let messagesContainerHeight = this.getMaxHeight() - this.getKeyboardHeight() - this.getActionsBarHeight() - this.state.composerHeight;
-    // if (this.props.isAnimated === true) {
-    //   Animated.timing(this.state.messagesContainerHeight, {
-    //     toValue: messagesContainerHeight,
-    //     duration: 210,
-    //   }).start();
-    // } else {
+    if (this.props.isAnimated === true) {
+      Animated.timing(this.state.messagesContainerHeight, {
+        toValue: messagesContainerHeight,
+        duration: 210,
+      }).start();
+    } else {
       this.setState((previousState) => {
         return {
           messagesContainerHeight,
         };
       });
-    // }
+    }
   }
 
 
