@@ -159,10 +159,7 @@ class GiftedChat extends React.Component {
   }
 
   setActionsBarHeight(height) {
-    if (height !== this.getActionsBarHeight()) {
-      this._actionsBarHeight = height;
-      this.recalculateContainerHeight();
-    }
+    this._actionsBarHeight = height;
   }
 
   getActionsBarHeight() {
@@ -444,13 +441,6 @@ class GiftedChat extends React.Component {
     );
   }
 
-  renderActionsBar() {
-    if (this.props.renderActionsBar) {
-      return this.props.renderActionsBar();
-    }
-    return null;
-  }
-
   renderChatFooter() {
     if (this.props.renderChatFooter) {
       const footerProps = {
@@ -485,20 +475,23 @@ class GiftedChat extends React.Component {
                   });
                 }
               }
+
+              // If actionsBar's height has changed, recalculate container size
+              if (this.props.actionsBarHeight !== this.getActionsBarHeight()) {
+                const layout = e.nativeEvent.layout;
+                this.setMaxHeight(layout.height);
+                this.setState({
+                  messagesContainerHeight: this.prepareMessagesContainerHeight(this.getMaxHeight() - this.getMinInputToolbarHeight()),
+                });
+                this.setActionsBarHeight(this.props.actionsBarHeight);
+              }
+
               if (this.getIsFirstLayout() === true) {
                 this.setIsFirstLayout(false);
               }
             }}
           >
             {this.renderMessages()}
-            <View
-              onLayout={(event) => {
-                var {height} = event.nativeEvent.layout;
-                this.setActionsBarHeight(height);
-              }}
-            >
-              {this.renderActionsBar()}
-            </View>
             {this.renderInputToolbar()}
           </View>
         </ActionSheet>
@@ -510,6 +503,7 @@ class GiftedChat extends React.Component {
         onLayout={(e) => {
           const layout = e.nativeEvent.layout;
           this.setMaxHeight(layout.height);
+          this.setActionsBarHeight(this.props.actionsBarHeight);
           InteractionManager.runAfterInteractions(() => {
             this.setState({
               isInitialized: true,
@@ -560,7 +554,6 @@ GiftedChat.defaultProps = {
   renderComposer: null,
   renderCustomView: null,
   renderDay: null,
-  renderActionsBar: null,
   renderInputToolbar: null,
   renderLoadEarlier: null,
   renderLoading: null,
