@@ -11,6 +11,8 @@ import ActionSheet from '@exponent/react-native-action-sheet';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import moment from 'moment/min/moment-with-locales.min';
 
+import _ from 'lodash';
+
 import Actions from './Actions';
 import Avatar from './Avatar';
 import Bubble from './Bubble';
@@ -65,6 +67,7 @@ class GiftedChat extends React.Component {
     this.onSend = this.onSend.bind(this);
     this.onAnswerPress = this.onAnswerPress.bind(this);
     this.getLocale = this.getLocale.bind(this);
+    this.customStyles = this.customStyles.bind(this);
 
     this.invertibleScrollViewProps = {
       inverted: true,
@@ -198,6 +201,11 @@ class GiftedChat extends React.Component {
     return this._isMounted;
   }
 
+  customStyles(string) {
+    console.log(this.props.styles, string);
+    return _.get(this.props.styles, string, {});
+  }
+
   // TODO
   // setMinInputToolbarHeight
   getMinInputToolbarHeight() {
@@ -305,6 +313,7 @@ class GiftedChat extends React.Component {
           onAnswerPress={this.onAnswerPress}
 
           messages={this.getMessages()}
+          customStyles={this.customStyles}
 
           onLayout={event => {
             this._messageContainerRef.scrollTo({y: Math.max(0, this._messageContainerRef.contentHeight - this.state.messagesContainerHeight._value), animated: true});

@@ -76,11 +76,7 @@ export default class Bubble extends React.Component {
     return null;
   }
 
-  onAnswerPress(answer) {
-    console.log("All the infos about the answer pressed", answer);
-  }
-
-  renderAnswers(answers) {
+  renderAnswers() {
     if (this.props.currentMessage.answers) {
       return <Answers {...this.props} />;
     }
@@ -110,8 +106,8 @@ export default class Bubble extends React.Component {
 
   render() {
     return (
-      <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-        <View style={[styles[this.props.position].wrapper, this.props.wrapperStyle[this.props.position], this.handleBubbleToNext(), this.handleBubbleToPrevious()]}>
+      <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position], this.props.customStyles(`Bubble.${this.props.position}.container`)]}>
+        <View style={[styles[this.props.position].wrapper, this.props.wrapperStyle[this.props.position], this.handleBubbleToNext(), this.handleBubbleToPrevious(), this.props.customStyles(`Bubble.${this.props.position}.wrapper`)]}>
           <TouchableWithoutFeedback
             onLongPress={this.onLongPress}
           >
