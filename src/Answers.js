@@ -1,9 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet,
 } from 'react-native';
 
 class Answers extends Component {
@@ -26,9 +25,9 @@ class Answers extends Component {
             key={`answer-${index}`}
             underlayColor="transparent"
             onPress={() => this.onPress(answer)}
-            style={[styles.answer]}
+            style={this.props.customStyles('Answers.answer')}
           >
-            <Text style={styles.text}>{answer.text}</Text>
+            <Text style={this.props.customStyles('Answers.text')}>{answer.text}</Text>
           </TouchableHighlight>
         );
       });
@@ -39,7 +38,7 @@ class Answers extends Component {
   render() {
     return (
       <View
-        style={[styles.container]}
+        style={[this.props.customStyles('Answers.container')]}
       >
         {this.renderAnswers()}
       </View>
@@ -47,24 +46,15 @@ class Answers extends Component {
   }
 }
 
-Answers.defaultProps = {
-  onPress: (answer) => {},
-  customStyles: {},
-};
+Answers.propTypes = {
+  customStyles: React.PropTypes.func.isRequired,
+  customOnAnswerPress: React.PropTypes.func,
+  onAnswerPress: React.PropTypes.func,
+  currentMessage: React.PropTypes.object,
+}
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 8,
-    backgroundColor: '#f6f6f6',
-  },
-  answer: {
-    borderTopWidth: 1,
-    borderColor: '#ECEAF5',
-    padding: 20,
-  },
-  text: {
-    textAlign: 'center',
-  }
-});
+Answers.defaultProps = {
+  onPress: () => {},
+};
 
 export default Answers;

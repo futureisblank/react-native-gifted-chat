@@ -2,8 +2,6 @@ import React from 'react';
 import {
   Clipboard,
   StyleSheet,
-  Text,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -206,4 +204,6 @@ Bubble.propTypes = {
   currentMessage: React.PropTypes.object,
   nextMessage: React.PropTypes.object,
   previousMessage: React.PropTypes.object,
+  customStyles: React.PropTypes.func,
+  invertedScrollView: React.PropTypes.object,
 };

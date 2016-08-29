@@ -202,7 +202,6 @@ class GiftedChat extends React.Component {
   }
 
   customStyles(string) {
-    console.log(this.props.styles, string);
     return _.get(this.props.styles, string, {});
   }
 
@@ -598,9 +597,11 @@ GiftedChat.propTypes = {
   renderMessage: React.PropTypes.func,
   renderSend: React.PropTypes.func,
   renderTime: React.PropTypes.func,
+  styles: React.PropTypes.object,
   user: React.PropTypes.object,
   bottomOffset: React.PropTypes.number,
   isLoadingEarlier: React.PropTypes.bool,
+  hideInputToolbar: React.PropTypes.bool,
 };
 
 export {
