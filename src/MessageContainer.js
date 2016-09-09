@@ -150,6 +150,7 @@ export default class MessageContainer extends React.Component {
           automaticallyAdjustContentInsets={false}
           initialListSize={20}
           pageSize={20}
+          style={this.props.customStyles('MessageContainerListView')}
 
           dataSource={this.state.dataSource}
 
