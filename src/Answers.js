@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {
   View,
+  Image,
   Text,
   TouchableHighlight,
+  StyleSheet,
 } from 'react-native';
 
 class Answers extends Component {
@@ -17,6 +19,10 @@ class Answers extends Component {
     return this.props.onAnswerPress(answer);
   }
 
+  renderIcon(image) {
+    return <Image source={image} style={styles.icon} />;
+  }
+
   renderAnswers() {
     if (this.props.currentMessage.answers) {
       return this.props.currentMessage.answers.map((answer, index) => {
@@ -27,7 +33,10 @@ class Answers extends Component {
             onPress={() => this.onPress(answer)}
             style={this.props.customStyles('Answers.answer')}
           >
-            <Text style={this.props.customStyles('Answers.text')}>{answer.text}</Text>
+            <View style={styles.answerContainer}>
+              <Text style={this.props.customStyles('Answers.text')}>{answer.text}</Text>
+              {answer.icon ? this.renderIcon(answer.icon) : null}
+            </View>
           </TouchableHighlight>
         );
       });
@@ -45,6 +54,17 @@ class Answers extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  answerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    marginLeft: 10,
+  },
+});
 
 Answers.propTypes = {
   customStyles: React.PropTypes.func.isRequired,
