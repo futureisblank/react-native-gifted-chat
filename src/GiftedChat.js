@@ -512,14 +512,14 @@ class GiftedChat extends React.Component {
           const layout = e.nativeEvent.layout;
           this.setMaxHeight(layout.height);
           this.setActionsBarHeight(this.props.actionsBarHeight);
-          InteractionManager.runAfterInteractions(() => {
-            this.setState({
-              isInitialized: true,
-              text: '',
-              composerHeight: this.props.hideInputToolbar ? 0 : MIN_COMPOSER_HEIGHT,
-              messagesContainerHeight: this.prepareMessagesContainerHeight(this.getMaxHeight() - this.getMinInputToolbarHeight()),
-            });
+          // InteractionManager.runAfterInteractions(() => {
+          this.setState({
+            isInitialized: true,
+            text: '',
+            composerHeight: this.props.hideInputToolbar ? 0 : MIN_COMPOSER_HEIGHT,
+            messagesContainerHeight: this.prepareMessagesContainerHeight(this.getMaxHeight() - this.getMinInputToolbarHeight()),
           });
+          // });
         }}
       >
         {this.renderLoading()}
