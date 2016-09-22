@@ -209,7 +209,7 @@ class GiftedChat extends React.Component {
   // setMinInputToolbarHeight
   getMinInputToolbarHeight() {
     if (this.props.hideInputToolbar) {
-      return MIN_INPUT_TOOLBAR_HEIGHT;
+      return 0;
     }
     if (this.props.renderAccessory) {
       return MIN_INPUT_TOOLBAR_HEIGHT * 2;
@@ -228,7 +228,8 @@ class GiftedChat extends React.Component {
     this.setIsTypingDisabled(true);
     this.setKeyboardHeight(e.endCoordinates.height);
     this.setBottomOffset(this.props.bottomOffset);
-    const newMessagesContainerHeight = (this.getMaxHeight() - (this.state.composerHeight + (this.getMinInputToolbarHeight() - MIN_COMPOSER_HEIGHT))) - this.getKeyboardHeight() + this.getBottomOffset();
+    const composerHeight = this.props.hideInputToolbar ? 0 : this.state.composerHeight + (this.getMinInputToolbarHeight() - MIN_COMPOSER_HEIGHT);
+    const newMessagesContainerHeight = (this.getMaxHeight() - composerHeight) - this.getKeyboardHeight() + this.getBottomOffset();
     if (this.props.isAnimated === true) {
       Animated.timing(this.state.messagesContainerHeight, {
         toValue: newMessagesContainerHeight,
@@ -247,7 +248,8 @@ class GiftedChat extends React.Component {
     this.setIsTypingDisabled(true);
     this.setKeyboardHeight(0);
     this.setBottomOffset(0);
-    const newMessagesContainerHeight = this.getMaxHeight() - (this.state.composerHeight + (this.getMinInputToolbarHeight() - MIN_COMPOSER_HEIGHT));
+    const composerHeight = this.props.hideInputToolbar ? 0 : this.state.composerHeight + (this.getMinInputToolbarHeight() - MIN_COMPOSER_HEIGHT);
+    const newMessagesContainerHeight = (this.getMaxHeight() - composerHeight) - this.getKeyboardHeight() + this.getBottomOffset();
     if (this.props.isAnimated === true) {
       Animated.timing(this.state.messagesContainerHeight, {
         toValue: newMessagesContainerHeight,
@@ -473,9 +475,9 @@ class GiftedChat extends React.Component {
           <View
             style={styles.container}
             onLayout={(e) => {
+              const layout = e.nativeEvent.layout;
               if (Platform.OS === 'android') {
                 // fix an issue when keyboard is dismissing during the initialization
-                const layout = e.nativeEvent.layout;
                 if (this.getMaxHeight() !== layout.height && this.getIsFirstLayout() === true) {
                   this.setMaxHeight(layout.height);
                   this.setState({
@@ -483,20 +485,28 @@ class GiftedChat extends React.Component {
                   });
                 }
               }
+              setTimeout(() => {
+                // If actionsBar's height has changed, recalculate container size
+                if (this.props.actionsBarHeight !== this.getActionsBarHeight()) {
+                  this.setMaxHeight(layout.height);
+                  if (this.props.isAnimated === true) {
+                    Animated.timing(this.state.messagesContainerHeight, {
+                      toValue: layout.height,
+                      duration: 210,
+                    }).start();
+                  }
+                  else {
+                    this.setState({
+                      messagesContainerHeight: layout.height,
+                    });
+                  }
+                  this.setActionsBarHeight(this.props.actionsBarHeight);
+                }
 
-              // If actionsBar's height has changed, recalculate container size
-              if (this.props.actionsBarHeight !== this.getActionsBarHeight()) {
-                const layout = e.nativeEvent.layout;
-                this.setMaxHeight(layout.height);
-                this.setState({
-                  messagesContainerHeight: this.prepareMessagesContainerHeight(this.getMaxHeight() - this.getMinInputToolbarHeight()),
-                });
-                this.setActionsBarHeight(this.props.actionsBarHeight);
-              }
-
-              if (this.getIsFirstLayout() === true) {
-                this.setIsFirstLayout(false);
-              }
+                if (this.getIsFirstLayout() === true) {
+                  this.setIsFirstLayout(false);
+                }
+              }, 50);
             }}
           >
             {this.renderMessages()}
