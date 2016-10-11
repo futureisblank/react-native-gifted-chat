@@ -29,7 +29,11 @@ class Summary extends Component {
     }
     return languages.map((language, id) => {
       return (
-        <Text key={`language-${id}`} style={[this.props.customStyles('Summary.section.value')]}> {language} </Text>
+        <Image
+          key={`language-${id}`}
+          style={this.props.customStyles('Summary.provider.flag')}
+          source={{uri: language}}
+        />
       );
     });
   }
@@ -61,17 +65,23 @@ class Summary extends Component {
           </View>
           <View style={[this.props.customStyles('Summary.section.container'), this.props.customStyles('Summary.section.containerHorizontal')]}>
             <Text style={[this.props.customStyles('Summary.section.title'), this.props.customStyles('Summary.section.alignLeft'), this.props.customStyles('Summary.section.titlePrice')]}>Total</Text>
-            <Text style={[this.props.customStyles('Summary.section.value'), this.props.customStyles('Summary.section.alignRight')]}>{summary.price}</Text>
+            <Text style={[this.props.customStyles('Summary.section.value'), this.props.customStyles('Summary.section.alignRight')]}>{summary.price} €</Text>
           </View>
           <View style={[this.props.customStyles('Summary.section.container'), this.props.customStyles('Summary.section.containerLast')]}>
             <Text style={[this.props.customStyles('Summary.section.title')]}>SITTER</Text>
             <View style={[this.props.customStyles('Summary.section.containerHorizontal')]}>
               <View style={[this.props.customStyles('Summary.section.alignLeft')]}>
                 <Text style={[this.props.customStyles('Summary.section.value')]}>{summary.provider.name} {summary.provider.missionsCount} missions</Text>
-                <Text style={[this.props.customStyles('Summary.section.containerHorizontal')]}>{this.listLanguages(summary.provider.languages)}</Text>
+                <View style={[this.props.customStyles('Summary.section.containerHorizontal')]}>{this.listLanguages(summary.provider.languages)}</View>
               </View>
               <View style={[this.props.customStyles('Summary.section.alignRight')]}>
-                <Image source={{ uri: summary.provider.pictureUri }} style={{ width: 36, height: 36, borderRadius: 18 }} />
+                <Image
+                  source={{ uri: summary.provider.pictureUri }}
+                  style={[
+                    this.props.customStyles('Summary.provider.avatar'),
+                    { width: 36, height: 36, borderRadius: 18 },
+                  ]}
+                />
               </View>
             </View>
           </View>

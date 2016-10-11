@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 18,
+    marginBottom: 10,
   },
   wrapper: {
     // backgroundColor: '#ccc',
