@@ -9,6 +9,7 @@ import moment from 'moment';
 import Avatar from './Avatar';
 import Bubble from './Bubble';
 import Day from './Day';
+import SmallMessage from './SmallMessage';
 
 export default class Message extends React.Component {
 
@@ -75,6 +76,11 @@ export default class Message extends React.Component {
   }
 
   render() {
+    if (this.props.currentMessage.smallText) {
+      return (
+        <SmallMessage {...this.props} />
+      );
+    }
     return (
       <View>
         {this.renderDay()}
