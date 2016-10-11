@@ -9,6 +9,7 @@ import {
 import Answers from './Answers';
 import MessageText from './MessageText';
 import MessageImage from './MessageImage';
+import Summary from './Summary';
 import Time from './Time';
 
 export default class Bubble extends React.Component {
@@ -81,6 +82,13 @@ export default class Bubble extends React.Component {
     return null;
   }
 
+  renderSummary() {
+    if (this.props.currentMessage.summary) {
+      return <Summary {...this.props} />;
+    }
+    return null;
+  }
+
   onLongPress() {
     if (this.props.currentMessage.text) {
       const options = [
@@ -114,6 +122,7 @@ export default class Bubble extends React.Component {
               {this.renderMessageImage()}
               {this.renderMessageText()}
               {this.renderAnswers()}
+              {this.renderSummary()}
               {this.renderTime()}
             </View>
           </TouchableWithoutFeedback>
