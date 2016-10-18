@@ -470,10 +470,11 @@ class GiftedChat extends React.Component {
 
   render() {
     if (this.state.isInitialized === true) {
+      const marginBottom = this.props.hideInputToolbar ? 0 : 40;
       return (
         <ActionSheet ref={component => this._actionSheetRef = component}>
           <View
-            style={styles.container}
+            style={[styles.container, { marginBottom }]}
             onLayout={(e) => {
               const layout = e.nativeEvent.layout;
               if (Platform.OS === 'android') {
@@ -487,7 +488,9 @@ class GiftedChat extends React.Component {
               }
               setTimeout(() => {
                 // If actionsBar's height has changed, recalculate container size
-                if (this.props.actionsBarHeight !== this.getActionsBarHeight()) {
+                if (this.props.actionsBarHeight !== this.getActionsBarHeight()
+                  || this.props.hideInputToolbar !== this.prevHideInputToolbar) {
+                  this.props.hideInputToolbar = this.prevHideInputToolbar;
                   this.setMaxHeight(layout.height);
                   if (this.props.isAnimated === true) {
                     Animated.timing(this.state.messagesContainerHeight, {
