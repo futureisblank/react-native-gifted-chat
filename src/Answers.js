@@ -12,11 +12,11 @@ class Answers extends Component {
     super(props);
   }
 
-  onPress(answer) {
+  onPress(answer, message) {
     if (this.props.customOnAnswerPress) {
-      this.props.customOnAnswerPress(answer);
+      this.props.customOnAnswerPress(answer, message);
     }
-    return this.props.onAnswerPress(answer);
+    return this.props.onAnswerPress(answer, message);
   }
 
   renderIcon(image) {
@@ -30,10 +30,10 @@ class Answers extends Component {
           <TouchableHighlight
             key={`answer-${index}`}
             underlayColor="transparent"
-            onPress={() => this.onPress(answer)}
+            onPress={() => this.onPress(answer, this.props.currentMessage)}
             style={this.props.customStyles('Answers.answer')}
           >
-            <View style={styles.answerContainer}>
+            <View style={[styles.answerContainer, (answer.inactive ? this.props.customStyles('Answers.inactive') : {})]}>
               <Text style={this.props.customStyles('Answers.text')}>{answer.text}</Text>
               {answer.icon ? this.renderIcon(answer.icon) : null}
             </View>

@@ -362,7 +362,10 @@ class GiftedChat extends React.Component {
     }
   }
 
-  onAnswerPress(answer) {
+  onAnswerPress(answer, message) {
+    if (answer.deleteNextMessages) {
+      this.props.dispatch({type: 'DELETE_CHAT_MESSAGES_AFTER', data: { answer, messageId: message._id }});
+    }
     if (!answer.preventSendMessage) {
       this.onSend({
         text: answer.text.trim()
@@ -370,7 +373,7 @@ class GiftedChat extends React.Component {
     }
     if (answer.action) {
       if (this.props.dispatch) {
-        this.props.dispatch({...answer.action, data: answer});
+        this.props.dispatch({...answer.action, data: {answer, message}});
       }
     }
   }
@@ -587,6 +590,7 @@ GiftedChat.defaultProps = {
 };
 
 GiftedChat.propTypes = {
+  dispatch: React.PropTypes.func,
   messages: React.PropTypes.array,
   onSend: React.PropTypes.func,
   loadEarlier: React.PropTypes.bool,
