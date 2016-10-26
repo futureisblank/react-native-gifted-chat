@@ -317,11 +317,11 @@ class GiftedChat extends React.Component {
           customStyles={this.customStyles}
 
           onLayout={event => {
-            this._messageContainerRef.scrollTo({y: Math.max(0, this._messageContainerRef.contentHeight - this.state.messagesContainerHeight._value), animated: true});
+            this._messageContainerRef.scrollTo({y: Math.max(0, this._messageContainerRef.contentHeight - this.state.messagesContainerHeight._value), animated: false});
           }}
           onContentSizeChange={(width, height) => {
             this._messageContainerRef.contentHeight = height;
-            this._messageContainerRef.scrollTo({y: Math.max(0, this._messageContainerRef.contentHeight - this.state.messagesContainerHeight._value), animated: true})
+            this._messageContainerRef.scrollTo({y: Math.max(0, this._messageContainerRef.contentHeight - this.state.messagesContainerHeight._value), animated: false})
           }}
 
           ref={component => this._messageContainerRef = component}
